@@ -157,7 +157,16 @@ module.exports = (db, name, opts) => {
     if (_sort) {
       const _sortSet = _sort.split(',')
       const _orderSet = (_order || '').split(',').map((s) => s.toLowerCase())
-      chain = chain.orderBy(_sortSet, _orderSet)
+      
+            if (_orderSet == "asc") {
+                chain = chain.sort((a, b) =>
+                    _.get(a, _sortSet[0]).localeCompare(_.get(b, _sortSet[0]))
+                )
+            } else {
+                chain = chain.sort((a, b) =>
+                    _.get(b, _sortSet[0]).localeCompare(_.get(a, _sortSet[0]))
+                )
+            }
     }
 
     // Slice result
